@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi JavaScript Dasar</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #materi {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h2, h3 {
+            color: #333;
+        }
+
+        hr {
+            margin: 15px 0;
+        }
+
+        pre {
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="materi">
+
+<h2>⚡ JavaScript Dasar </h2>
+
+<p>
+JavaScript adalah bahasa pemrograman yang digunakan untuk membuat website menjadi interaktif, dinamis, dan responsif terhadap pengguna.
+JavaScript bekerja bersama HTML dan CSS untuk membangun halaman web modern.
+</p>
+
+<hr>
+
+<h3>🧠 1. Pengertian JavaScript</h3>
+
+<p>
+JavaScript adalah bahasa pemrograman yang berjalan di browser (client-side scripting).
+Artinya, JavaScript dijalankan langsung di browser pengguna tanpa perlu server tambahan.
+</p>
+
+<p>
+JavaScript digunakan untuk menambahkan logika dan interaksi pada website seperti tombol, animasi, validasi form, dan game sederhana.
+</p>
+
+<ul>
+<li>HTML = struktur</li>
+<li>CSS = tampilan</li>
+<li>JavaScript = interaksi</li>
+</ul>
+
+<hr>
+
+<h3>🌐 2. Fungsi JavaScript</h3>
+<ul>
+<li>Membuat website interaktif</li>
+<li>Validasi form login / registrasi</li>
+<li>Membuat game sederhana</li>
+<li>Mengubah isi halaman tanpa reload</li>
+<li>Membuat animasi dan efek</li>
+<li>Mengontrol elemen HTML</li>
+</ul>
+
+<hr>
+
+<h3>🧾 3. Cara Penulisan JavaScript</h3>
+
+<p><b>Contoh:</b></p>
+
+<pre>
+&lt;script&gt;
+alert("Halo Dunia!");
+&lt;/script&gt;
+</pre>
+
+<p><b>Penjelasan:</b></p>
+<ul>
+<li><code>&lt;script&gt;</code> = tempat menulis JavaScript di HTML</li>
+<li><code>alert()</code> = menampilkan pesan popup</li>
+</ul>
+
+<hr>
+
+<h3>🧩 4. Variabel</h3>
+
+<pre>
+let nama = "Budi";
+const umur = 17;
+</pre>
+
+<p><b>Penjelasan:</b></p>
+<ul>
+<li><code>let</code> = variabel yang bisa diubah</li>
+<li><code>const</code> = variabel tetap (tidak bisa diubah)</li>
+<li><code>var</code> = cara lama (jarang digunakan)</li>
+<li>variabel = tempat menyimpan data</li>
+</ul>
+
+<hr>
+
+<h3>🔢 5. Tipe Data</h3>
+
+<ul>
+<li>String = teks ("Halo")</li>
+<li>Number = angka (10, 20, 3.5)</li>
+<li>Boolean = true / false</li>
+<li>Array = kumpulan data</li>
+<li>Object = data yang lebih kompleks</li>
+<li>Undefined = belum memiliki nilai</li>
+</ul>
+
+<hr>
+
+<h3>⚙️ 6. Operator</h3>
+
+<ul>
+<li>+ = penjumlahan</li>
+<li>- = pengurangan</li>
+<li>* = perkalian</li>
+<li>/ = pembagian</li>
+<li>% = sisa bagi</li>
+</ul>
+
+<p><b>Contoh:</b></p>
+
+<pre>
+10 + 5 = 15
+20 - 3 = 17
+</pre>
+
+<hr>
+
+<h3>🔁 7. IF ELSE (Percabangan)</h3>
+
+<pre>
+if (nilai > 75) {
+  console.log("Lulus");
+} else {
+  console.log("Tidak Lulus");
+}
+</pre>
+
+<p><b>Penjelasan:</b></p>
+<ul>
+<li>IF = jika kondisi benar</li>
+<li>ELSE = jika kondisi salah</li>
+<li>digunakan untuk pengambilan keputusan</li>
+</ul>
+
+<hr>
+
+<h3>🔄 8. Loop (Perulangan)</h3>
+
+<pre>
+for (let i = 1; i <= 5; i++) {
+  console.log(i);
+}
+</pre>
+
+<p><b>Penjelasan:</b></p>
+<ul>
+<li>for = perulangan</li>
+<li>i++ = bertambah 1 setiap putaran</li>
+<li>digunakan untuk mengulang proses</li>
+</ul>
+
+<hr>
+
+<h3>🖱️ 9. Event (Interaksi User)</h3>
+
+<pre>
+<button onclick="alert('Tombol diklik!')">Klik Saya</button>
+</pre>
+
+<p><b>Penjelasan:</b></p>
+<ul>
+<li>onclick = saat tombol diklik</li>
+<li>onmouseover = saat mouse diarahkan</li>
+<li>event = aksi pengguna</li>
+</ul>
+
+<hr>
+
+<h3>🧠 10. DOM (Document Object Model)</h3>
+
+<pre>
+document.getElementById("judul").innerHTML = "Halo!";
+</pre>
+
+<p><b>Penjelasan:</b></p>
+<ul>
+<li>DOM = cara JavaScript mengubah HTML</li>
+<li>getElementById = mengambil elemen HTML</li>
+<li>innerHTML = mengubah isi teks</li>
+</ul>
+
+<hr>
+
+<h3>🧩 11. FUNCTION</h3>
+
+<pre>
+function sapa() {
+  alert("Halo!");
+}
+</pre>
+
+<p><b>Penjelasan:</b></p>
+<ul>
+<li>function = kumpulan perintah</li>
+<li>bisa dipanggil berkali-kali</li>
+</ul>
+
+<hr>
+
+<h3>📌 12. CONTOH KESIMPULAN KUIS</h3>
+
+<ul>
+<li>JavaScript = bahasa pemrograman web interaktif</li>
+<li>alert = popup pesan</li>
+<li>let = variabel bisa berubah</li>
+<li>const = variabel tetap</li>
+<li>DOM = manipulasi HTML</li>
+<li>function = kumpulan perintah</li>
+</ul>
+
+<hr>
+
+<h3>📌 13. KESIMPULAN</h3>
+
+<p>
+JavaScript adalah bahasa pemrograman penting dalam web development yang digunakan untuk membuat website menjadi interaktif, dinamis, dan responsif.
+</p>
+
+<p>
+Dengan JavaScript, kita bisa membuat tombol interaktif, validasi data, animasi, game sederhana, dan aplikasi web modern.
+</p>
+
+</div>
+
+</body>
+</html>

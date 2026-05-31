@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materi MySQL Lengkap</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    line-height: 1.7;
+}
+h1,h2,h3{
+    color:#0f172a;
+}
+hr{
+    margin: 15px 0;
+}
+.note{
+    background:#f1f5f9;
+    padding:10px;
+    border-left:5px solid #f59e0b;
+    margin:10px 0;
+}
+.btn{
+    padding:10px 15px;
+    background:#1e3a8a;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>🗄️ Materi MySQL (Database) </h1>
+<p>
+MySQL adalah DBMS yang digunakan untuk mengelola database menggunakan bahasa SQL. 
+</p>
+</header>
+
+<div id="materi">
+
+<h2>🧠 1. Pengertian MySQL</h2>
+<p>
+MySQL adalah sistem manajemen basis data (DBMS) yang menggunakan SQL untuk menyimpan, mengubah, dan mengambil data dari database.
+MySQL bersifat open source dan banyak digunakan pada aplikasi web.
+</p>
+
+<div class="note">
+📌 Kuis: MySQL = DBMS untuk mengelola database
+</div>
+
+<hr>
+
+<h3>🎯 2. Fungsi MySQL (Diperluas)</h3>
+<ul>
+<li>Menyimpan data dalam jumlah besar</li>
+<li>Mengelola data secara terstruktur</li>
+<li>Mendukung aplikasi web dan mobile</li>
+<li>Mengamankan data pengguna</li>
+<li>Mengatur hak akses user</li>
+<li>Mendukung multi-user (banyak pengguna)</li>
+</ul>
+
+<hr>
+
+<h3>⚙️ 3. Struktur MySQL</h3>
+<ul>
+<li>Database → kumpulan tabel</li>
+<li>Tabel → tempat data disimpan</li>
+<li>Field → kolom data</li>
+<li>Record → baris data</li>
+</ul>
+
+<div class="note">
+📌 Kuis: Field = kolom, Record = baris
+</div>
+
+<hr>
+
+<h3>🧾 4. SQL Command (Lebih Lengkap)</h3>
+<ul>
+<li>CREATE DATABASE → membuat database</li>
+<li>DROP DATABASE → menghapus database</li>
+<li>CREATE TABLE → membuat tabel</li>
+<li>ALTER TABLE → mengubah struktur tabel</li>
+<li>INSERT INTO → menambah data</li>
+<li>SELECT → menampilkan data</li>
+<li>UPDATE → mengubah data</li>
+<li>DELETE → menghapus data</li>
+</ul>
+
+<div class="note">
+📌 Kuis: SELECT = menampilkan data
+</div>
+
+<hr>
+
+<h3>💻 5. Contoh Query Penting</h3>
+
+<pre>
+CREATE DATABASE sekolah;
+USE sekolah;
+
+CREATE TABLE siswa (
+id INT PRIMARY KEY,
+nama VARCHAR(100),
+kelas VARCHAR(10)
+);
+
+INSERT INTO siswa VALUES (1, 'Budi', 'X RPL');
+
+SELECT * FROM siswa;
+</pre>
+
+<hr>
+
+<h3>🔑 6. Primary Key & Foreign Key (Diperjelas)</h3>
+<ul>
+<li>Primary Key → identitas unik (tidak boleh sama)</li>
+<li>Foreign Key → penghubung antar tabel</li>
+<li>Relasi penting untuk database besar</li>
+</ul>
+
+<div class="note">
+📌 Kuis: Primary Key = unik, tidak boleh sama
+</div>
+
+<hr>
+
+<h3>📊 7. CRUD (Lebih Detail)</h3>
+<ul>
+<li>Create → INSERT</li>
+<li>Read → SELECT</li>
+<li>Update → UPDATE</li>
+<li>Delete → DELETE</li>
+</ul>
+
+<div class="note">
+📌 Kuis: CRUD = Create Read Update Delete
+</div>
+
+<hr>
+
+<h3>🧩 8. Relasi Database</h3>
+<ul>
+<li>One to One → satu ke satu</li>
+<li>One to Many → satu ke banyak</li>
+<li>Many to Many → banyak ke banyak</li>
+</ul>
+
+<hr>
+
+<h3>🔐 9. Keamanan MySQL</h3>
+<ul>
+<li>Username & password database</li>
+<li>GRANT (hak akses user)</li>
+<li>REVOKE (hapus akses user)</li>
+<li>Backup database secara rutin</li>
+<li>Firewall server database</li>
+</ul>
+
+<hr>
+
+<h3>⚡ 10. Kelebihan MySQL</h3>
+<ul>
+<li>Gratis dan open source</li>
+<li>Ringan dan cepat</li>
+<li>Mudah dipelajari</li>
+<li>Cocok untuk web development</li>
+<li>Stabil untuk data besar</li>
+</ul>
+
+<hr>
+
+<h3>❌ 11. Kekurangan MySQL</h3>
+<ul>
+<li>Kurang cocok untuk data super kompleks tertentu</li>
+<li>Fitur enterprise lebih sedikit dibanding Oracle</li>
+</ul>
+
+<hr>
+
+<h3>🧠 12. KONSEP KUIS PENTING (RINGKAS)</h3>
+
+<div class="note">
+✔ MySQL = DBMS  
+✔ SQL = bahasa database  
+✔ SELECT = ambil data  
+✔ INSERT = tambah data  
+✔ UPDATE = ubah data  
+✔ DELETE = hapus data  
+✔ Primary Key = unik  
+✔ Foreign Key = penghubung tabel  
+✔ CRUD = operasi database  
+</div>
+
+<hr>
+
+<h3>🌍 13. Penerapan MySQL di Dunia Nyata</h3>
+<ul>
+<li>Sistem nilai sekolah</li>
+<li>E-commerce (Shopee, Tokopedia)</li>
+<li>Bank (data nasabah)</li>
+<li>Aplikasi login & user</li>
+<li>Sistem absensi</li>
+</ul>
+
+<hr>
+
+<h3>📌 14. KESIMPULAN</h3>
+<p>
+MySQL adalah sistem database penting yang digunakan hampir di semua aplikasi modern.
+Dengan MySQL, data dapat disimpan dengan aman, terstruktur, dan mudah diakses.
+</p>
+
+<p>
+Pemahaman MySQL sangat penting untuk pemrograman web, sistem informasi, dan pengolahan data.
+</p>
+
+</div>
+
+</body>
+</html>
