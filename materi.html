@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materi - Eduflex</title>
+
+<!-- CSS EKSTERNAL TAMBAHAN -->
+<link rel="stylesheet" href="styl.css">
+
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <h2>Eduflex</h2>
+
+    <a href="index.html">🏠 Home</a>
+    <a href="materi.html">📚 Materi</a>
+    <a href="video.html">🎥 Video</a>
+    <a href="kuis.html">📝 Kuis</a>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <h1 class="title">📚 Materi Pembelajaran</h1>
+
+    <div class="layout">
+
+        <!-- LIST -->
+        <div class="materi-list">
+
+            <input
+            type="text"
+            id="search"
+            placeholder="Cari materi..."
+            onkeyup="cariMateri()"
+            class="search-box"
+            >
+
+            <div id="listMateri"></div>
+
+        </div>
+
+        <!-- DETAIL -->
+        <div class="materi-detail">
+
+            <div class="materi-content">
+
+                <div class="welcome">
+
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdW1xYzF6dWJ6b2V0b2Z6bWJ0aWJ4b2R3eGJ0d2V6Z2J6eGZ0dG5mYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0HlNaQ6gWfllcjDO/giphy.gif">
+
+
+                    <h2>Selamat Datang di Materi Eduflex</h2>
+
+                    <p>
+                        Pilih materi untuk mulai belajar.
+                        Setiap materi sudah terhubung ke halaman isi materi lengkap
+                        seperti pengertian, fungsi, contoh, dan penjelasan yang mudah dipahami.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+<script>
+
+/* DATA MATERI */
+const dataMateri = [
+
+{
+judul: "Pengenalan Komputer",
+link: "Pengenalankom.html"
+},
+
+{
+judul: "Perangkat Keras",
+link: "perangkatkrs.html"
+},
+
+{
+judul: "Perangkat Lunak",
+link: "iperangkatlnk.html"
+},
+
+{
+judul: "Internet",
+link: "internet.html"
+},
+
+{
+judul: "HTML Dasar",
+link: "htmldasar.html"
+},
+
+{
+judul: "CSS Dasar",
+link: "cssdasar.html"
+},
+
+{
+judul: "JavaScript",
+link: "js.html"
+},
+
+{
+judul: "Sistem Operasi",
+link: "os.html"
+},
+
+{
+judul: "Microsoft Word",
+link: "microsoftword.html"
+},
+
+{
+judul: "Microsoft Excel",
+link: "microsoftexcel.html"
+},
+
+{
+judul: "PowerPoint",
+link: "powerpoint.html"
+},
+
+{
+judul: "Jaringan Komputer",
+link: "jaringankom.html"
+},
+
+{
+judul: "Topologi Jaringan",
+link: "topologijaringan.html"
+},
+
+{
+judul: "Keamanan Jaringan",
+link: "kemananjaringan.html"
+},
+
+{
+judul: "Database",
+link: "database.html"
+},
+
+{
+judul: "MySQL",
+link: "mysql.html"
+},
+
+];
+
+/* RENDER */
+function renderMateri(filter = ""){
+
+    const list = document.getElementById("listMateri");
+
+    list.innerHTML = "";
+
+    dataMateri.forEach((materi)=>{
+
+        if(
+            materi.judul.toLowerCase().includes(filter.toLowerCase())
+        ){
+
+            list.innerHTML += `
+
+            <a href="${materi.link}" class="materi-item">
+
+                📘 ${materi.judul}
+
+            </a>
+
+            `;
+        }
+
+    });
+
+}
+
+/* SEARCH */
+function cariMateri(){
+
+    const keyword =
+    document.getElementById("search").value;
+
+    renderMateri(keyword);
+
+}
+
+/* LOAD */
+window.onload = ()=>{
+
+    renderMateri();
+
+}
+
+</script>
+
+</body>
+</html>

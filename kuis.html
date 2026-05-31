@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Eduflex</title>
+
+<!-- CSS EKSTERNAL TAMBAHAN -->
+<link rel="stylesheet" href="styl.css">
+
+</style>
+</head>
+
+<body class="quiz">
+
+<!-- HOME -->
+<a href="index.html" class="home-btn" onclick="event.stopPropagation(); window.location.href='index.html'; return false;">
+🏠 Home
+</a>
+
+<!-- ICON -->
+<div class="icon icon1">🧠</div>
+<div class="icon icon2">💡</div>
+<div class="icon icon3">📚</div>
+<div class="icon icon4">⚙️</div>
+
+<!-- START -->
+<div class="screen" id="startScreen">
+
+<div class="card">
+
+<div class="title">
+    <span style="font-size:34px;">🧠</span>
+    <h2>Eduflex Quiz</h2>
+    <span style="font-size:34px;">💡</span>
+</div>
+
+<p>Pilih Materi</p>
+
+<select id="materi">
+<option value="komputer">Pengenalan Komputer</option>
+<option value="hardware">Perangkat Keras</option>
+<option value="software">Perangkat Lunak</option>
+<option value="internet">Internet</option>
+<option value="html">HTML Dasar</option>
+<option value="css">CSS Dasar</option>
+<option value="javascript">JavaScript</option>
+<option value="os">Sistem Operasi</option>
+<option value="word">Microsoft Word</option>
+<option value="excel">Microsoft Excel</option>
+<option value="powerpoint">PowerPoint</option>
+<option value="jaringan">Jaringan Komputer</option>
+<option value="topologi">Topologi Jaringan</option>
+<option value="keamanan">Keamanan Jaringan</option>
+<option value="database">Database</option>
+<option value="mysql">MySQL</option>
+</select>
+
+<p>Pilih Level</p>
+
+<select id="level">
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="hard">Hard</option>
+</select>
+
+<button class="btn" onclick="startQuiz()">Mulai Kuis 🚀</button>
+
+</div>
+</div>
+
+<script>
+
+const quizData = {
+komputer:{easy:[],medium:[],hard:[]},
+hardware:{easy:[],medium:[],hard:[]},
+software:{easy:[],medium:[],hard:[]},
+internet:{easy:[],medium:[],hard:[]},
+html:{easy:[],medium:[],hard:[]},
+css:{easy:[],medium:[],hard:[]},
+javascript:{easy:[],medium:[],hard:[]},
+os:{easy:[],medium:[],hard:[]},
+word:{easy:[],medium:[],hard:[]},
+excel:{easy:[],medium:[],hard:[]},
+powerpoint:{easy:[],medium:[],hard:[]},
+jaringan:{easy:[],medium:[],hard:[]},
+topologi:{easy:[],medium:[],hard:[]},
+keamanan:{easy:[],medium:[],hard:[]},
+database:{easy:[],medium:[],hard:[]},
+mysql:{easy:[],medium:[],hard:[]},
+php:{easy:[],medium:[],hard:[]},
+bootstrap:{easy:[],medium:[],hard:[]},
+ai:{easy:[],medium:[],hard:[]}
+};
+
+function startQuiz(){
+
+let materi=document.getElementById("materi").value;
+let level=document.getElementById("level").value;
+
+window.location.href=
+"isi_kuis.html?materi="+materi+"&level="+level;
+
+}
+
+</script>
+
+</body>
+</html>

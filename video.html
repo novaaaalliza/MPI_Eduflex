@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Video - Eduflex</title>
+
+<!-- CSS EKSTERNAL TAMBAHAN -->
+<link rel="stylesheet" href="styl.css">
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <h2>Eduflex</h2>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="materi.html">Materi</a>
+    <a href="video.html">Video</a>
+    <a href="kuis.html">Kuis</a>
+  </div>
+</nav>
+
+<h2 class="title">🎥 Video Pembelajaran</h2>
+
+<!-- SEARCH -->
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="🔍 Cari video (komputer, hardware, software...)" onkeyup="searchVideo()">
+</div>
+
+<div class="container">
+
+<!-- PLAYER -->
+<div class="video-player">
+  <iframe id="videoFrame" allowfullscreen></iframe>
+  <h3 id="judul"></h3>
+  <p id="deskripsi"></p>
+</div>
+
+<!-- LIST -->
+<div class="video-list" id="listVideo"></div>
+
+</div>
+
+<script>
+
+/* =========================
+   DATA VIDEO (SUDAH DIPERBAIKI)
+========================= */
+const videos = [
+{
+judul:"Pengenalan Komputer",
+tag:"Dasar",
+link:"https://www.youtube.com/embed/OAx_6-wdslM",
+thumb:"https://img.youtube.com/vi/OAx_6-wdslM/0.jpg",
+desc:"Dasar pengenalan komputer dan komponennya."
+},
+
+{
+judul:"Hardware Komputer Lengkap",
+tag:"Hardware",
+link:"https://www.youtube.com/embed/d86ws7mQYIg",
+thumb:"https://img.youtube.com/vi/d86ws7mQYIg/0.jpg",
+desc:"Penjelasan lengkap CPU, RAM, motherboard, dan perangkat keras lainnya."
+},
+
+{
+judul:"Software Komputer & OS",
+tag:"Software",
+link:"https://www.youtube.com/embed/1OukpDfsuXE",
+thumb:"https://img.youtube.com/vi/1OukpDfsuXE/0.jpg",
+desc:"Penjelasan software komputer dan sistem operasi."
+},
+
+{
+judul:"Jaringan Komputer Dasar",
+tag:"Jaringan",
+link:"https://www.youtube.com/embed/3QhU9jd03a0",
+thumb:"https://img.youtube.com/vi/3QhU9jd03a0/0.jpg",
+desc:"Dasar jaringan komputer dan internet."
+},
+
+{
+judul:"Sistem Operasi (OS)",
+tag:"OS",
+link:"https://www.youtube.com/embed/26QPDBe-NB8",
+thumb:"https://img.youtube.com/vi/26QPDBe-NB8/0.jpg",
+desc:"Cara kerja sistem operasi pada komputer."
+},
+
+{
+judul:"Internet & Web",
+tag:"Internet",
+link:"https://www.youtube.com/embed/Dxcc6ycZ73M",
+thumb:"https://img.youtube.com/vi/Dxcc6ycZ73M/0.jpg",
+desc:"Pengertian internet dan cara kerja web."
+},
+
+{
+judul:"Algoritma Dasar",
+tag:"Coding",
+link:"https://www.youtube.com/embed/8hly31xKli0",
+thumb:"https://img.youtube.com/vi/8hly31xKli0/0.jpg",
+desc:"Dasar algoritma dan logika pemrograman."
+}
+];
+
+let filtered = [...videos];
+
+/* =========================
+   LOAD VIDEO
+========================= */
+function loadVideo(i){
+  const v = filtered[i];
+  if(!v) return;
+
+  document.getElementById("videoFrame").src = v.link;
+  document.getElementById("judul").innerText = v.judul;
+  document.getElementById("deskripsi").innerText = v.desc;
+
+  document.querySelectorAll(".video-card")
+  .forEach(c => c.classList.remove("active"));
+
+  if(document.querySelectorAll(".video-card")[i]){
+    document.querySelectorAll(".video-card")[i].classList.add("active");
+  }
+}
+
+/* =========================
+   RENDER LIST
+========================= */
+function render(){
+  let html = "";
+
+  if(filtered.length === 0){
+    document.getElementById("listVideo").innerHTML =
+    "<p style='color:white'>Video tidak ditemukan</p>";
+    return;
+  }
+
+  filtered.forEach((v,i)=>{
+    html += `
+      <div class="video-card" onclick="loadVideo(${i})">
+        <img src="${v.thumb}" class="thumb">
+        <div>
+          <span class="tag">${v.tag}</span>
+          <h4>${v.judul}</h4>
+          <p>Video pembelajaran</p>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById("listVideo").innerHTML = html;
+}
+
+/* =========================
+   SEARCH
+========================= */
+function searchVideo(){
+  let q = document.getElementById("searchInput").value.toLowerCase();
+
+  filtered = videos.filter(v =>
+    v.judul.toLowerCase().includes(q) ||
+    v.tag.toLowerCase().includes(q) ||
+    v.desc.toLowerCase().includes(q)
+  );
+
+  render();
+
+  if(filtered.length > 0){
+    loadVideo(0);
+  }
+}
+
+/* INIT */
+render();
+loadVideo(0);
+
+</script>
+
+</body>
+</html>

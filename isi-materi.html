@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Materi Pembelajaran - Eduflex</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#6a5af9,#a29bfe);
+}
+
+/* CONTAINER */
+.container{
+    display:flex;
+}
+
+/* SIDEBAR (TETAP TEMA KAMU) */
+.sidebar{
+    width:230px;
+    background:white;
+    padding:20px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    overflow-y:auto;
+    box-shadow:0 0 15px rgba(0,0,0,0.1);
+}
+
+.sidebar h2{
+    color:#6a5af9;
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.sidebar a{
+    display:block;
+    text-decoration:none;
+    color:#333;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:10px;
+    font-weight:bold;
+}
+
+.sidebar a:hover{
+    background:#eef0ff;
+    color:#6a5af9;
+}
+
+/* MAIN */
+.main{
+    margin-left:270px;
+    padding:30px;
+    width:100%;
+}
+
+/* HEADER */
+.header{
+    background:white;
+    padding:25px;
+    border-radius:25px;
+    margin-bottom:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+.header h1{
+    color:#6a5af9;
+    margin-bottom:10px;
+}
+
+.header p{
+    color:#666;
+    line-height:1.8;
+}
+
+/* LAYOUT */
+.layout{
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+}
+
+/* LIST */
+.materi-list{
+    width:30%;
+}
+
+/* SEARCH */
+.search-box{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    margin-bottom:20px;
+}
+
+/* SCROLL LIST */
+#listMateri{
+    max-height:700px;
+    overflow-y:auto;
+    padding-right:5px;
+}
+
+/* ITEM */
+.materi-item{
+    background:white;
+    padding:16px;
+    border-radius:15px;
+    margin-bottom:14px;
+    cursor:pointer;
+    transition:0.3s;
+    font-weight:bold;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.materi-item:hover{
+    transform:translateX(6px);
+    background:#eef0ff;
+    color:#6a5af9;
+}
+
+/* DETAIL */
+.materi-detail{
+    width:70%;
+}
+
+/* CONTENT */
+.materi-content{
+    background:white;
+    padding:30px;
+    border-radius:25px;
+    min-height:700px;
+    max-height:700px;
+    overflow-y:auto;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* WELCOME (ADA GAMBAR) */
+.welcome{
+    text-align:center;
+    margin-top:40px;
+}
+
+.welcome img{
+    width:180px;
+    margin-bottom:20px;
+}
+
+.welcome h2{
+    color:#6a5af9;
+}
+
+.welcome p{
+    color:#666;
+    line-height:1.8;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>Eduflex</h2>
+<a href="index.html">🏠 Home</a>
+<a href="materi.html">📚 Materi</a>
+<a href="video.html">🎥 Video</a>
+<a href="kuis.html">📝 Kuis</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="header">
+<h1>📚 Materi Pembelajaran Eduflex</h1>
+<p>Selamat Datang di Eduflex, Pilih materi di sebelah kiri untuk membuka file pembelajaran</p>
+</div>
+
+<div class="layout">
+
+<!-- LIST -->
+<div class="materi-list">
+
+<input type="text" id="search" placeholder="Cari materi..." onkeyup="cariMateri()" class="search-box">
+
+<div id="listMateri"></div>
+
+</div>
+
+<!-- DETAIL -->
+<div class="materi-detail">
+<div class="materi-content" id="konten">
+
+<div class="welcome">
+<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdW1xYzF6dWJ6b2V0b2Z6bWJ0aWJ4b2R3eGJ0d2V6Z2J6eGZ0dG5mYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0HlNaQ6gWfllcjDO/giphy.gif">
+<h2>Selamat Datang di Eduflex</h2>
+<p>Halaman ini berisi berbagai materi pembelajaran komputer, pemrograman, jaringan, database, dan teknologi modern. 
+    Silakan pilih materi di sebelah kiri untuk melihat isi materi lengkap.</p>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+/* DATA FILE MATERI (LOCAL FILE VS CODE) */
+const dataMateri = [
+{judul:"Pengenalan Komputer", file:"Pengenalankom.html"},
+{judul:"Perangkat Keras", file:"perangkatkrs.html"},
+{judul:"Perangkat Lunak", file:"perangkatlnk.html"},
+{judul:"Internet", file:"internet.html"},
+{judul:"HTML Dasar", file:"htmldasar.html"},
+{judul:"CSS Dasar", file:"cssdasar.html"},
+{judul:"JavaScript", file:"js.html"},
+{judul:"Sistem Operasi", file:"os.html"},
+{judul:"Microsoft Word", file:"microsoftword.html"},
+{judul:"Microsoft Excel", file:"microsoftexcel.html"},
+{judul:"PowerPoint", file:"powerpoint.html"},
+{judul:"Jaringan Komputer", file:"jaringankom.html"},
+{judul:"Topologi Jaringan", file:"topologijaringan.html"},
+{judul:"Keamanan Jaringan", file:"kemananjaringan.html"},
+{judul:"Database", file:"database.html"},
+{judul:"MySQL", file:"mysql.html"}
+];
+
+/* RENDER LIST */
+function renderMateri(filter=""){
+
+const list=document.getElementById("listMateri");
+list.innerHTML="";
+
+dataMateri.forEach((m)=>{
+
+if(m.judul.toLowerCase().includes(filter.toLowerCase())){
+
+list.innerHTML += `
+<div class="materi-item" onclick="bukaMateri('${m.file}')">
+📘 ${m.judul}
+</div>
+`;
+}
+
+});
+
+}
+
+/* OPEN FILE (INI YANG KAMU MAU) */
+function bukaMateri(file){
+window.location.href = file;
+}
+
+/* SEARCH */
+function cariMateri(){
+const keyword=document.getElementById("search").value;
+renderMateri(keyword);
+}
+
+/* LOAD */
+window.onload=()=>{
+renderMateri();
+}
+
+</script>
+
+</body>
+</html>

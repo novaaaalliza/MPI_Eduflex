@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isi Kuis Eduflex</title>
+
+<style>
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    margin:0;
+    background:linear-gradient(135deg,#6a5af9,#a29bfe);
+}
+
+/* HOME */
+.home-btn{
+    position:fixed;
+    top:15px;
+    left:15px;
+    background:white;
+    padding:10px 14px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:bold;
+    color:#5b4bdb;
+    box-shadow:0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* CONTAINER */
+.container{
+    max-width:750px;
+    margin:60px auto;
+    background:rgba(255,255,255,0.95);
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+
+h2{
+    text-align:center;
+    color:#5b4bdb;
+}
+
+h3{
+    color:#5b4bdb;
+}
+
+/* OPTION */
+.option{
+    padding:12px;
+    margin:10px 0;
+    background:#f1f2f6;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.option:hover{
+    background:#dfe4ff;
+    transform:translateX(5px);
+}
+
+.correct{
+    background:#2ed573 !important;
+    color:white;
+}
+
+.wrong{
+    background:#ff6b6b !important;
+    color:white;
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(45deg,#5b4bdb,#7a6cf0);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<a href="kuis.html" class="home-btn">🏠 Home</a>
+
+<div class="container">
+
+<h2>🧠 Eduflex Quiz</h2>
+
+<h3 id="question"></h3>
+
+<div id="options"></div>
+
+<button class="btn" onclick="next()">Next ➜</button>
+
+</div>
+
+<script>
+
+const urlParams = new URLSearchParams(window.location.search);
+
+let materi = urlParams.get("materi");
+let level = urlParams.get("level");
+
+let index = 0;
+let score = 0;
+
+/* =========================
+   SOAL QUIZ
+========================= */
+
+const quizData = {
+
+komputer:{
+easy:[
+{q:"Alat untuk mengetik disebut?",a:["Mouse","Printer","Keyboard","Scanner"],c:2},
+{q:"Monitor digunakan untuk?",a:["Mencetak","Menampilkan gambar","Menyimpan data","Mengetik"],c:1},
+{q:"Mouse termasuk perangkat?",a:["Input","Output","Storage","Software"],c:0},
+{q:"Printer digunakan untuk?",a:["Menampilkan","Mencetak","Menghapus","Memindai"],c:1},
+{q:"Perangkat lunak disebut?",a:["Hardware","Software","Brainware","Device"],c:1},
+{q:"Siapa pengguna komputer?",a:["CPU","Brainware","Monitor","Scanner"],c:1},
+{q:"Harddisk berfungsi untuk?",a:["Mengetik","Menyimpan data","Memindai","Menggambar"],c:1},
+{q:"Komputer adalah alat?",a:["Elektronik","Manual","Mekanik","Tradisional"],c:0},
+{q:"Speaker menghasilkan?",a:["Data","Suara","Tulisan","Listrik"],c:1}
+],
+
+medium:[
+{q:"RAM berfungsi sebagai?",a:["Penyimpanan tetap","Penyimpanan sementara","Input","Output"],c:1},
+{q:"ROM bersifat?",a:["Tetap","Sementara","Cepat hilang","Kosong"],c:0},
+{q:"CPU disebut juga?",a:["Otak komputer","Memori","Storage","Input"],c:0},
+{q:"Scanner digunakan untuk?",a:["Memindai","Mencetak","Browsing","Mengetik"],c:0},
+{q:"Software sistem contohnya?",a:["Windows","Paint","Word","Excel"],c:0},
+{q:"Keyboard termasuk perangkat?",a:["Output","Input","Storage","Jaringan"],c:1},
+{q:"UPS digunakan untuk?",a:["Cadangan listrik","Mencetak","Audio","Video"],c:0},
+{q:"Flashdisk termasuk?",a:["Input","Storage","Output","Software"],c:1},
+{q:"Mainboard disebut juga?",a:["Motherboard","CPU","ROM","RAM"],c:0},
+{q:"Power Supply berfungsi?",a:["Menyuplai listrik","Mengetik","Merekam","Menggambar"],c:0}
+],
+
+hard:[
+{q:"SSD lebih cepat dibanding?",a:["RAM","ROM","HDD","DVD"],c:2},
+{q:"BIOS tersimpan pada?",a:["RAM","ROM","CPU","SSD"],c:1},
+{q:"GPU digunakan untuk?",a:["Audio","Grafik","Internet","Storage"],c:1},
+{q:"Satuan kecepatan prosesor adalah?",a:["Hz","Byte","Pixel","Volt"],c:0},
+{q:"POST terjadi saat?",a:["Shutdown","Booting","Browsing","Printing"],c:1},
+{q:"NIC digunakan untuk?",a:["Jaringan","Audio","Video","Printing"],c:0},
+{q:"Cache memory berfungsi?",a:["Mempercepat proses","Mencetak","Browsing","Menyimpan permanen"],c:0},
+{q:"Overheating dicegah dengan?",a:["Fan","Scanner","Speaker","Printer"],c:0},
+{q:"Port HDMI digunakan untuk?",a:["Video dan audio","Listrik","Internet","Storage"],c:0},
+{q:"Sistem biner terdiri dari?",a:["0 dan 1","1 dan 2","A dan B","8 dan 9"],c:0}
+]
+},
+
+hardware:{
+easy:[
+{q:"Hardware adalah?",a:["Perangkat keras","Perangkat lunak","Program","Data"],c:0},
+{q:"Keyboard termasuk perangkat?",a:["Input","Output","Storage","Software"],c:0},
+{q:"Monitor termasuk perangkat?",a:["Input","Output","Storage","Network"],c:1},
+{q:"Printer digunakan untuk?",a:["Mencetak","Browsing","Mengetik","Memindai"],c:0},
+{q:"Mouse digunakan untuk?",a:["Mengklik","Mencetak","Merekam","Menyimpan"],c:0},
+{q:"Scanner digunakan untuk?",a:["Memindai","Mengetik","Browsing","Menggambar"],c:0},
+{q:"Speaker menghasilkan?",a:["Suara","Gambar","Data","Video"],c:0},
+{q:"Joystick biasa digunakan untuk?",a:["Game","Mengetik","Printing","Internet"],c:0},
+{q:"Flashdisk berfungsi untuk?",a:["Penyimpanan","Audio","Video","Input"],c:0},
+{q:"CPU termasuk perangkat?",a:["Proses","Input","Output","Storage"],c:0}
+],
+
+medium:[
+{q:"Motherboard berfungsi untuk?",a:["Menghubungkan komponen","Mencetak","Memindai","Browsing"],c:0},
+{q:"RAM termasuk?",a:["Memori","Input","Output","Software"],c:0},
+{q:"ROM adalah memori?",a:["Tetap","Sementara","Kosong","Virtual"],c:0},
+{q:"Projector digunakan untuk?",a:["Menampilkan layar","Mengetik","Mencetak","Merekam"],c:0},
+{q:"LAN Card digunakan untuk?",a:["Jaringan","Audio","Video","Storage"],c:0},
+{q:"CD-ROM termasuk?",a:["Storage","Input","Output","Process"],c:0},
+{q:"Heatsink digunakan untuk?",a:["Pendingin","Penyimpanan","Audio","Internet"],c:0},
+{q:"Webcam digunakan untuk?",a:["Video","Audio","Storage","Printing"],c:0},
+{q:"Harddisk adalah?",a:["Penyimpanan","Input","Output","Software"],c:0},
+{q:"Power Supply menghasilkan?",a:["Listrik","Data","Audio","Gambar"],c:0}
+],
+
+hard:[
+{q:"GPU kepanjangan dari?",a:["Graphic Processing Unit","General Process Unit","Graphic Program User","Global Process Unit"],c:0},
+{q:"UPS singkatan dari?",a:["Uninterruptible Power Supply","Universal Power Source","United Program System","Universal Program Supply"],c:0},
+{q:"Perangkat hybrid adalah?",a:["Touchscreen","Printer","CPU","Speaker"],c:0},
+{q:"Port USB digunakan untuk?",a:["Menghubungkan perangkat","Mencetak","Pendingin","Storage"],c:0},
+{q:"SSD memiliki keunggulan?",a:["Lebih cepat","Lebih lambat","Lebih panas","Lebih berat"],c:0},
+{q:"Peripheral adalah?",a:["Perangkat tambahan","Sistem operasi","Program","Data"],c:0},
+{q:"Microphone termasuk perangkat?",a:["Input","Output","Storage","Network"],c:0},
+{q:"Plotter biasa digunakan untuk?",a:["Mencetak desain","Audio","Internet","Storage"],c:0},
+{q:"Touchpad terdapat pada?",a:["Laptop","Printer","Scanner","Speaker"],c:0},
+{q:"VRAM digunakan untuk?",a:["Grafik","Audio","Printing","Storage"],c:0}
+]
+},
+
+software:{
+easy:[
+{q:"Software adalah?",a:["Perangkat keras","Perangkat lunak","Jaringan","Data"],c:1},
+{q:"Microsoft Word termasuk?",a:["Sistem Operasi","Aplikasi","Hardware","Browser"],c:1},
+{q:"Windows adalah?",a:["Aplikasi","Sistem Operasi","Browser","Database"],c:1},
+{q:"Software digunakan untuk?",a:["Menjalankan tugas komputer","Mencetak kertas","Menghubungkan listrik","Menyimpan kabel"],c:0},
+{q:"Google Chrome termasuk?",a:["Browser","Game","Driver","Hardware"],c:0},
+{q:"Paint digunakan untuk?",a:["Menggambar","Mengetik","Browsing","Memindai"],c:0},
+{q:"Antivirus berfungsi untuk?",a:["Menghapus virus","Mencetak","Menggambar","Browsing"],c:0},
+{q:"Microsoft Excel digunakan untuk?",a:["Pengolah angka","Pengolah gambar","Browser","Game"],c:0},
+{q:"PowerPoint digunakan untuk?",a:["Presentasi","Browsing","Menggambar","Memindai"],c:0},
+{q:"Aplikasi WhatsApp termasuk?",a:["Media komunikasi","Sistem Operasi","Hardware","Driver"],c:0}
+],
+
+medium:[
+{q:"Linux termasuk?",a:["Hardware","Sistem Operasi","Browser","Game"],c:1},
+{q:"Perangkat lunak aplikasi digunakan untuk?",a:["Membantu pekerjaan pengguna","Mengatur listrik","Menghubungkan kabel","Memperbaiki CPU"],c:0},
+{q:"Software open source contohnya?",a:["Ubuntu","Windows","Photoshop","CorelDraw"],c:0},
+{q:"Driver berfungsi untuk?",a:["Menghubungkan hardware dengan OS","Menggambar","Browsing","Menghapus data"],c:0},
+{q:"Mozilla Firefox adalah?",a:["Browser","OS","Game","Database"],c:0},
+{q:"Adobe Photoshop digunakan untuk?",a:["Edit gambar","Mengetik","Browsing","Memindai"],c:0},
+{q:"File berekstensi .exe biasanya?",a:["Program","Gambar","Video","Audio"],c:0},
+{q:"Update software bertujuan?",a:["Memperbaiki dan meningkatkan fitur","Menghapus data","Mematikan komputer","Mengurangi memori"],c:0},
+{q:"Microsoft Access termasuk?",a:["Database","Browser","Game","Editor"],c:0},
+{q:"Software utilitas contohnya?",a:["Antivirus","Word","Excel","PowerPoint"],c:0}
+],
+
+hard:[
+{q:"GUI adalah singkatan dari?",a:["Graphical User Interface","Global User Internet","General Utility Interface","Graphic Utility Internet"],c:0},
+{q:"Kernel merupakan bagian dari?",a:["Sistem Operasi","Browser","Game","Database"],c:0},
+{q:"Firmware adalah?",a:["Software yang tertanam pada perangkat","Hardware","Database","Jaringan"],c:0},
+{q:"Open source berarti?",a:["Kode sumber dapat diakses","Berbayar","Tidak dapat diubah","Rahasia"],c:0},
+{q:"Virtual Machine digunakan untuk?",a:["Menjalankan sistem operasi virtual","Menggambar","Mencetak","Browsing"],c:0},
+{q:"Compiler berfungsi untuk?",a:["Menerjemahkan kode program","Menghapus data","Browsing","Menggambar"],c:0},
+{q:"SQL digunakan untuk?",a:["Mengelola database","Membuat gambar","Browsing","Mencetak"],c:0},
+{q:"Software proprietary adalah?",a:["Software berlisensi tertutup","Open source","Gratis","Public domain"],c:0},
+{q:"Debugging berarti?",a:["Mencari dan memperbaiki error","Menghapus software","Mematikan komputer","Browsing"],c:0},
+{q:"Cloud software berjalan melalui?",a:["Internet","Printer","Scanner","Speaker"],c:0}
+]
+},
+
+internet:{
+easy:[
+{q:"Internet adalah?",a:["Jaringan global","Aplikasi","Hardware","CPU"],c:0},
+{q:"Google digunakan untuk?",a:["Mesin pencari","Sistem Operasi","Game","Database"],c:0},
+{q:"Email digunakan untuk?",a:["Mengirim pesan elektronik","Menggambar","Mencetak","Mengetik"],c:0},
+{q:"WWW singkatan dari?",a:["World Wide Web","World Web Wide","Wide World Web","Web World Wide"],c:0},
+{q:"Alamat website disebut?",a:["URL","CPU","RAM","ROM"],c:0},
+{q:"YouTube digunakan untuk?",a:["Menonton video","Mengetik","Menggambar","Mencetak"],c:0},
+{q:"Browser contohnya?",a:["Chrome","Word","Excel","PowerPoint"],c:0},
+{q:"Instagram termasuk?",a:["Media sosial","Browser","OS","Hardware"],c:0},
+{q:"Download berarti?",a:["Mengunduh data","Menghapus data","Mencetak","Menggambar"],c:0},
+{q:"Upload berarti?",a:["Mengirim data","Menghapus data","Mencetak","Browsing"],c:0}
+],
+
+medium:[
+{q:"HTTP digunakan untuk?",a:["Transfer halaman web","Audio","Video","Printer"],c:0},
+{q:"WiFi adalah?",a:["Teknologi jaringan nirkabel","Browser","Software","Database"],c:0},
+{q:"Spam adalah?",a:["Pesan tidak diinginkan","Virus","Browser","Website"],c:0},
+{q:"Modem berfungsi untuk?",a:["Menghubungkan ke internet","Mencetak","Memindai","Menggambar"],c:0},
+{q:"Search Engine contohnya?",a:["Google","Word","Excel","Photoshop"],c:0}
+],
+
+hard:[
+{q:"IP Address digunakan untuk?",a:["Identitas perangkat di jaringan","Nama website","Password","Email"],c:0},
+{q:"DNS berfungsi untuk?",a:["Menerjemahkan domain menjadi IP","Menghapus virus","Browsing","Mencetak"],c:0},
+{q:"HTTPS lebih aman karena?",a:["Menggunakan enkripsi","Lebih cepat","Gratis","Tanpa server"],c:0},
+{q:"Bandwidth adalah?",a:["Kapasitas transfer data","Password","Domain","Server"],c:0},
+{q:"Phishing bertujuan untuk?",a:["Mencuri data pengguna","Meningkatkan internet","Browsing","Menggambar"],c:0}
+]
+},
+
+html:{
+easy:[
+{q:"HTML singkatan dari?",a:["HyperText Markup Language","HighText Markup Language","Hyper Tool Markup Language","HyperText Main Language"],c:0},
+{q:"HTML digunakan untuk?",a:["Membuat halaman web","Mengedit foto","Membuat game","Database"],c:0},
+{q:"Tag HTML ditulis di antara?",a:["< >","{ }","[ ]","( )"],c:0},
+{q:"Tag untuk judul besar adalah?",a:["<h1>","<p>","<img>","<a>"],c:0},
+{q:"Tag paragraf adalah?",a:["<p>","<h1>","<img>","<br>"],c:0}
+],
+
+medium:[
+{q:"Tag untuk membuat link?",a:["<a>","<img>","<div>","<p>"],c:0},
+{q:"Tag untuk gambar?",a:["<img>","<a>","<p>","<h1>"],c:0},
+{q:"Atribut href digunakan pada?",a:["<a>","<img>","<p>","<div>"],c:0},
+{q:"Tag pindah baris?",a:["<br>","<hr>","<p>","<div>"],c:0},
+{q:"Tag garis horizontal?",a:["<hr>","<br>","<img>","<a>"],c:0}
+],
+
+hard:[
+{q:"Tag untuk membuat tabel?",a:["<table>","<form>","<div>","<span>"],c:0},
+{q:"Tag untuk form?",a:["<form>","<table>","<img>","<p>"],c:0},
+{q:"CSS biasanya diletakkan dalam tag?",a:["<style>","<script>","<linker>","<css>"],c:0},
+{q:"JavaScript ditulis dalam tag?",a:["<script>","<style>","<js>","<javascript>"],c:0},
+{q:"Tag <div> digunakan untuk?",a:["Membuat container","Menampilkan gambar","Link","Judul"],c:0}
+]
+},
+
+
+css:{
+easy:[
+{q:"CSS adalah singkatan dari?",a:["Cascading Style Sheets","Computer Style Sheets","Creative Style System","Color Style Sheets"],c:0},
+{q:"CSS digunakan untuk?",a:["Mengatur tampilan website","Membuat database","Membuat server","Mengolah angka"],c:0},
+{q:"CSS biasanya ditulis di dalam tag?",a:["<style>","<script>","<css>","<linker>"],c:0},
+{q:"Properti untuk mengubah warna teks?",a:["color","background","font","border"],c:0},
+{q:"Properti untuk warna latar belakang?",a:["background-color","font-color","bgcolor","color"],c:0},
+{q:"CSS termasuk bahasa?",a:["Style Sheet","Pemrograman","Database","Markup"],c:0},
+{q:"Selector untuk seluruh halaman adalah?",a:["body",".body","#body","*body"],c:0},
+{q:"Properti untuk ukuran huruf?",a:["font-size","text-size","size","font"],c:0},
+{q:"Properti untuk membuat teks tebal?",a:["font-weight","font-style","text-bold","weight"],c:0},
+{q:"Properti untuk rata tengah teks?",a:["text-align","align","center","font-align"],c:0}
+],
+
+medium:[
+{q:"Selector class diawali dengan?",a:[".","#","*","@"],c:0},
+{q:"Selector id diawali dengan?",a:["#",".","*","@"],c:0},
+{q:"Properti untuk memberi jarak dalam elemen?",a:["padding","margin","spacing","border"],c:0},
+{q:"Properti untuk memberi jarak luar elemen?",a:["margin","padding","spacing","border"],c:0},
+{q:"Properti untuk membuat garis tepi?",a:["border","outline","line","frame"],c:0},
+{q:"Display flex digunakan untuk?",a:["Mengatur layout fleksibel","Mengubah warna","Mengatur database","Menjalankan script"],c:0},
+{q:"Properti untuk mengubah jenis huruf?",a:["font-family","font-type","font-name","text-family"],c:0},
+{q:"Satuan ukuran yang relatif?",a:["%","cm","mm","inch"],c:0},
+{q:"Properti untuk mengubah tinggi elemen?",a:["height","width","size","length"],c:0},
+{q:"Properti untuk mengubah lebar elemen?",a:["width","height","size","length"],c:0}
+],
+
+hard:[
+{q:"Position absolute berarti?",a:["Posisi relatif terhadap parent","Selalu di tengah","Mengikuti scroll","Tetap di layar"],c:0},
+{q:"Position fixed berarti?",a:["Tetap saat halaman di-scroll","Mengikuti parent","Di tengah","Dinamis"],c:0},
+{q:"CSS Grid digunakan untuk?",a:["Membuat layout grid","Mengubah warna","Menjalankan JS","Database"],c:0},
+{q:"Pseudo-class :hover digunakan saat?",a:["Kursor berada di atas elemen","Klik dua kali","Halaman dimuat","Scroll"],c:0},
+{q:"Properti z-index digunakan untuk?",a:["Mengatur lapisan elemen","Mengatur ukuran","Mengatur warna","Mengatur font"],c:0},
+{q:"Media query digunakan untuk?",a:["Responsive design","Database","Animasi","Keamanan"],c:0},
+{q:"Transform: rotate() digunakan untuk?",a:["Memutar elemen","Memperbesar elemen","Mengubah warna","Menghapus elemen"],c:0},
+{q:"Opacity digunakan untuk?",a:["Mengatur transparansi","Mengatur ukuran","Mengatur warna","Mengatur posisi"],c:0},
+{q:"Animation digunakan untuk?",a:["Membuat animasi","Membuat tabel","Membuat database","Membuat server"],c:0},
+{q:"Flexbox menggunakan properti utama?",a:["display:flex","display:block","display:grid","display:inline"],c:0}
+]
+},
+
+javascript:{
+easy:[
+{q:"JavaScript digunakan untuk?",a:["Membuat website interaktif","Mengatur CSS","Membuat database","Mengelola jaringan"],c:0},
+{q:"JavaScript ditulis dalam tag?",a:["<script>","<style>","<js>","<code>"],c:0},
+{q:"JavaScript dijalankan oleh?",a:["Browser","Printer","Scanner","Monitor"],c:0},
+{q:"Perintah untuk menampilkan pesan?",a:["alert()","show()","print()","message()"],c:0},
+{q:"Variabel digunakan untuk?",a:["Menyimpan data","Menghapus data","Mencetak data","Menggambar"],c:0},
+{q:"Tipe data angka disebut?",a:["Number","String","Boolean","Array"],c:0},
+{q:"Tipe data teks disebut?",a:["String","Number","Boolean","Array"],c:0},
+{q:"Nilai benar atau salah disebut?",a:["Boolean","String","Number","Object"],c:0},
+{q:"Komentar satu baris diawali dengan?",a:["//","/*","<!--","#"],c:0},
+{q:"console.log() digunakan untuk?",a:["Menampilkan output di console","Menghapus data","Mencetak","Menggambar"],c:0}
+],
+
+medium:[
+{q:"Operator penjumlahan dalam JavaScript adalah?",a:["+","-","*","/"],c:0},
+{q:"Percabangan menggunakan kata kunci?",a:["if","for","while","loop"],c:0},
+{q:"Perulangan yang umum digunakan?",a:["for","img","table","link"],c:0},
+{q:"Input dari pengguna dapat diambil dengan?",a:["prompt()","alert()","write()","print()"],c:0},
+{q:"Array digunakan untuk?",a:["Menyimpan banyak data","Menghapus data","Menggambar","Browsing"],c:0},
+{q:"Panjang array diperoleh dengan?",a:["length","size","count","total"],c:0},
+{q:"Fungsi dibuat dengan kata kunci?",a:["function","method","create","def"],c:0},
+{q:"Operator perbandingan sama dengan?",a:["==","=","!=","<"],c:0},
+{q:"Operator tidak sama dengan?",a:["!=","==","=","<"],c:0},
+{q:"switch digunakan untuk?",a:["Percabangan banyak kondisi","Perulangan","Array","Komentar"],c:0}
+],
+
+hard:[
+{q:"DOM adalah singkatan dari?",a:["Document Object Model","Data Object Model","Document Order Method","Data Order Model"],c:0},
+{q:"getElementById() digunakan untuk?",a:["Mengambil elemen berdasarkan ID","Menghapus elemen","Membuat CSS","Membuat database"],c:0},
+{q:"addEventListener() digunakan untuk?",a:["Menambahkan event","Menghapus event","Membuat array","Membuat fungsi"],c:0},
+{q:"JSON digunakan untuk?",a:["Pertukaran data","Menggambar","Mencetak","Menjalankan CSS"],c:0},
+{q:"parseInt() digunakan untuk?",a:["Mengubah string menjadi integer","Mengubah angka menjadi string","Menghapus data","Mencetak data"],c:0},
+{q:"Keyword const digunakan untuk?",a:["Variabel tetap","Perulangan","Percabangan","Array"],c:0},
+{q:"Keyword let digunakan untuk?",a:["Membuat variabel","Membuat fungsi","Membuat array","Membuat objek"],c:0},
+{q:"Event onclick terjadi saat?",a:["Elemen diklik","Halaman dimuat","Mouse keluar","Keyboard ditekan"],c:0},
+{q:"setTimeout() digunakan untuk?",a:["Menjalankan kode setelah waktu tertentu","Menghapus kode","Membuat array","Membuat CSS"],c:0},
+{q:"Local Storage digunakan untuk?",a:["Menyimpan data di browser","Menyimpan data di server","Menghapus data","Menggambar"],c:0}
+]
+},
+
+os:{
+easy:[
+{q:"Sistem Operasi adalah?",a:["Perangkat lunak yang mengelola komputer","Perangkat keras","Jaringan internet","Database"],c:0},
+{q:"Contoh Sistem Operasi?",a:["Windows","Word","Excel","Chrome"],c:0},
+{q:"Android termasuk?",a:["Sistem Operasi","Browser","Aplikasi","Database"],c:0},
+{q:"Windows dibuat oleh?",a:["Microsoft","Google","Apple","Linux"],c:0},
+{q:"Sistem Operasi berfungsi untuk?",a:["Mengelola perangkat keras dan software","Mencetak dokumen","Menggambar","Browsing"],c:0},
+{q:"Linux termasuk?",a:["Sistem Operasi","Aplikasi","Browser","Game"],c:0},
+{q:"iOS digunakan pada perangkat?",a:["iPhone","Samsung","Xiaomi","Asus"],c:0},
+{q:"Booting adalah proses?",a:["Menyalakan komputer","Mematikan komputer","Menghapus data","Mencetak data"],c:0},
+{q:"Desktop adalah?",a:["Tampilan utama komputer","CPU","Keyboard","Printer"],c:0},
+{q:"File Explorer digunakan untuk?",a:["Mengelola file dan folder","Browsing","Menggambar","Memutar musik"],c:0}
+],
+
+medium:[
+{q:"Kernel adalah?",a:["Inti dari sistem operasi","Perangkat keras","Aplikasi","Driver"],c:0},
+{q:"Task Manager digunakan untuk?",a:["Mengelola proses yang berjalan","Menggambar","Browsing","Mencetak"],c:0},
+{q:"Driver berfungsi untuk?",a:["Menghubungkan hardware dengan OS","Menghapus file","Browsing","Membuat dokumen"],c:0},
+{q:"Folder digunakan untuk?",a:["Menyimpan dan mengelompokkan file","Menjalankan game","Mencetak","Browsing"],c:0},
+{q:"Shortcut digunakan untuk?",a:["Akses cepat ke program","Menghapus data","Browsing","Mematikan komputer"],c:0},
+{q:"Multitasking berarti?",a:["Menjalankan beberapa program sekaligus","Menghapus banyak file","Membuka internet","Menginstal OS"],c:0},
+{q:"Windows Explorer sekarang dikenal sebagai?",a:["File Explorer","Control Panel","Task Manager","Command Prompt"],c:0},
+{q:"Control Panel digunakan untuk?",a:["Mengatur sistem","Menggambar","Browsing","Mencetak"],c:0},
+{q:"Restart berarti?",a:["Menyalakan ulang komputer","Mematikan komputer","Menghapus data","Mencetak"],c:0},
+{q:"Shutdown berarti?",a:["Mematikan komputer","Menghidupkan komputer","Browsing","Mencetak"],c:0}
+],
+
+hard:[
+{q:"CLI adalah singkatan dari?",a:["Command Line Interface","Computer Line Interface","Control Line Internet","Command Link Interface"],c:0},
+{q:"GUI adalah singkatan dari?",a:["Graphical User Interface","Global User Internet","Graphic Utility Interface","General User Interface"],c:0},
+{q:"Open source berarti?",a:["Kode sumber dapat diakses","Berbayar","Tertutup","Rahasia"],c:0},
+{q:"Virtual Memory digunakan untuk?",a:["Memori tambahan dari penyimpanan","Menyimpan gambar","Mencetak file","Browsing"],c:0},
+{q:"File dengan ekstensi .exe biasanya?",a:["Program aplikasi","Gambar","Video","Audio"],c:0},
+{q:"Safe Mode digunakan untuk?",a:["Menjalankan sistem dengan fitur minimal","Mempercepat internet","Menghapus printer","Menggambar"],c:0},
+{q:"Partisi harddisk adalah?",a:["Pembagian ruang penyimpanan","Penghapusan data","Backup data","Defrag"],c:0},
+{q:"Command Prompt digunakan untuk?",a:["Menjalankan perintah teks","Menggambar","Mencetak","Browsing"],c:0},
+{q:"Sistem operasi yang populer untuk server adalah?",a:["Linux","Paint","Photoshop","PowerPoint"],c:0},
+{q:"Dual Boot berarti?",a:["Dua sistem operasi dalam satu komputer","Dua harddisk","Dua monitor","Dua keyboard"],c:0}
+]
+},
+
+word:{
+easy:[
+{q:"Microsoft Word digunakan untuk?",a:["Mengolah kata","Mengolah angka","Presentasi","Database"],c:0},
+{q:"Ikon Save digunakan untuk?",a:["Menyimpan dokumen","Membuka dokumen","Mencetak","Menutup"],c:0},
+{q:"Shortcut untuk menyimpan dokumen?",a:["Ctrl+S","Ctrl+P","Ctrl+N","Ctrl+O"],c:0},
+{q:"Membuat dokumen baru menggunakan?",a:["Ctrl+N","Ctrl+S","Ctrl+P","Ctrl+Z"],c:0},
+{q:"Untuk mencetak dokumen digunakan?",a:["Ctrl+P","Ctrl+S","Ctrl+O","Ctrl+N"],c:0},
+{q:"Word termasuk aplikasi?",a:["Pengolah kata","Pengolah angka","Presentasi","Browser"],c:0},
+{q:"Fitur untuk menebalkan teks?",a:["Bold","Italic","Underline","Align"],c:0},
+{q:"Fitur untuk memiringkan teks?",a:["Italic","Bold","Underline","Font"],c:0},
+{q:"Fitur untuk garis bawah teks?",a:["Underline","Bold","Italic","Size"],c:0},
+{q:"Ekstensi file Word modern?",a:[".docx",".xlsx",".pptx",".pdf"],c:0}
+],
+
+medium:[
+{q:"Shortcut untuk copy?",a:["Ctrl+C","Ctrl+V","Ctrl+X","Ctrl+A"],c:0},
+{q:"Shortcut untuk paste?",a:["Ctrl+V","Ctrl+C","Ctrl+X","Ctrl+Z"],c:0},
+{q:"Shortcut untuk cut?",a:["Ctrl+X","Ctrl+C","Ctrl+V","Ctrl+A"],c:0},
+{q:"Shortcut untuk memilih semua teks?",a:["Ctrl+A","Ctrl+C","Ctrl+X","Ctrl+N"],c:0},
+{q:"Menu untuk mengatur margin?",a:["Layout","Insert","Review","View"],c:0},
+{q:"Header berada di?",a:["Bagian atas halaman","Bagian bawah halaman","Tengah halaman","Samping halaman"],c:0},
+{q:"Footer berada di?",a:["Bagian bawah halaman","Bagian atas halaman","Tengah halaman","Samping halaman"],c:0},
+{q:"Insert Picture digunakan untuk?",a:["Menambahkan gambar","Menambahkan tabel","Menambahkan halaman","Mencetak"],c:0},
+{q:"Page Number digunakan untuk?",a:["Memberi nomor halaman","Mengubah font","Membuat tabel","Menyimpan"],c:0},
+{q:"Find digunakan untuk?",a:["Mencari teks","Menghapus teks","Mencetak","Menyimpan"],c:0}
+],
+
+hard:[
+{q:"Mail Merge digunakan untuk?",a:["Membuat surat massal","Membuat tabel","Membuat gambar","Mencetak"],c:0},
+{q:"Track Changes digunakan untuk?",a:["Melacak perubahan dokumen","Menghapus dokumen","Menyimpan dokumen","Mencetak"],c:0},
+{q:"Table of Contents adalah?",a:["Daftar isi otomatis","Daftar gambar","Daftar tabel","Header"],c:0},
+{q:"Format Painter digunakan untuk?",a:["Menyalin format","Menyalin teks","Mencetak","Menghapus"],c:0},
+{q:"Ctrl+Z digunakan untuk?",a:["Undo","Redo","Copy","Paste"],c:0},
+{q:"Ctrl+Y digunakan untuk?",a:["Redo","Undo","Copy","Paste"],c:0},
+{q:"Watermark digunakan untuk?",a:["Tanda latar dokumen","Nomor halaman","Header","Footer"],c:0},
+{q:"Orientation Landscape berarti?",a:["Halaman horizontal","Halaman vertikal","Halaman kosong","Halaman kecil"],c:0},
+{q:"Orientation Portrait berarti?",a:["Halaman vertikal","Halaman horizontal","Halaman kosong","Halaman besar"],c:0},
+{q:"References digunakan untuk?",a:["Daftar pustaka dan sitasi","Menggambar","Mencetak","Menyimpan"],c:0}
+]
+},
+
+excel:{
+easy:[
+{q:"Microsoft Excel digunakan untuk?",a:["Mengolah angka","Mengolah kata","Presentasi","Browser"],c:0},
+{q:"File Excel berekstensi?",a:[".xlsx",".docx",".pptx",".txt"],c:0},
+{q:"Kolom di Excel dilambangkan dengan?",a:["Huruf","Angka","Simbol","Warna"],c:0},
+{q:"Baris di Excel dilambangkan dengan?",a:["Angka","Huruf","Simbol","Warna"],c:0},
+{q:"Rumus diawali dengan?",a:["=","+","-","/"],c:0},
+{q:"SUM digunakan untuk?",a:["Menjumlahkan","Mengurangi","Mengalikan","Membagi"],c:0},
+{q:"Excel termasuk aplikasi?",a:["Spreadsheet","Word Processor","Browser","Game"],c:0},
+{q:"Sel aktif ditandai dengan?",a:["Border tebal","Warna merah","Huruf besar","Blink"],c:0},
+{q:"Workbook adalah?",a:["File Excel","Sheet","Kolom","Baris"],c:0},
+{q:"Worksheet adalah?",a:["Lembar kerja","File","Program","Folder"],c:0}
+],
+
+medium:[
+{q:"Rumus AVERAGE digunakan untuk?",a:["Mencari rata-rata","Menjumlahkan","Menghapus","Mengalikan"],c:0},
+{q:"MAX digunakan untuk?",a:["Nilai terbesar","Nilai terkecil","Rata-rata","Jumlah"],c:0},
+{q:"MIN digunakan untuk?",a:["Nilai terkecil","Nilai terbesar","Rata-rata","Jumlah"],c:0},
+{q:"AutoFill digunakan untuk?",a:["Mengisi otomatis","Menghapus data","Menyimpan","Mencetak"],c:0},
+{q:"Chart digunakan untuk?",a:["Grafik","Teks","Gambar","Video"],c:0},
+{q:"Sort digunakan untuk?",a:["Mengurutkan data","Menghapus data","Menjumlahkan","Menggambar"],c:0},
+{q:"Filter digunakan untuk?",a:["Menyaring data","Menghapus file","Menyimpan","Mencetak"],c:0},
+{q:"Cell adalah?",a:["Perpotongan baris dan kolom","Kolom","Baris","Sheet"],c:0},
+{q:"Formula bar digunakan untuk?",a:["Menampilkan rumus","Menghapus data","Mencetak","Menutup file"],c:0},
+{q:"Merge cell digunakan untuk?",a:["Menggabungkan sel","Memisah sel","Menghapus sel","Menyalin sel"],c:0}
+],
+
+hard:[
+{q:"VLOOKUP digunakan untuk?",a:["Mencari data vertikal","Menjumlahkan","Mengurutkan","Menghapus"],c:0},
+{q:"HLOOKUP digunakan untuk?",a:["Mencari data horizontal","Menghapus data","Mengurutkan","Menggambar"],c:0},
+{q:"IF digunakan untuk?",a:["Logika kondisi","Penjumlahan","Grafik","Sorting"],c:0},
+{q:"Absolute reference ditandai dengan?",a:["$","@","#","&"],c:0},
+{q:"Relative reference adalah?",a:["Referensi berubah saat disalin","Tetap","Error","Kosong"],c:0},
+{q:"Pivot Table digunakan untuk?",a:["Analisis data","Menggambar","Mencetak","Browser"],c:0},
+{q:"Freeze Panes digunakan untuk?",a:["Mengunci baris/kolom","Menghapus data","Menjumlahkan","Sorting"],c:0},
+{q:"COUNT digunakan untuk?",a:["Menghitung jumlah data","Menjumlahkan","Mengalikan","Menghapus"],c:0},
+{q:"COUNTA digunakan untuk?",a:["Menghitung data tidak kosong","Menghapus data","Sorting","Filter"],c:0},
+{q:"Formula error #DIV/0! berarti?",a:["Pembagian dengan nol","Salah nama","Data kosong","File rusak"],c:0}
+]
+},
+
+powerpoint:{
+easy:[
+{q:"PowerPoint digunakan untuk?",a:["Presentasi","Mengolah angka","Mengedit video","Browser"],c:0},
+{q:"File PowerPoint berekstensi?",a:[".pptx",".docx",".xlsx",".pdf"],c:0},
+{q:"Slide adalah?",a:["Halaman presentasi","File","Program","Folder"],c:0},
+{q:"Text Box digunakan untuk?",a:["Menulis teks","Menggambar","Menghapus","Menyimpan"],c:0},
+{q:"Insert digunakan untuk?",a:["Menambahkan objek","Menghapus file","Menyimpan","Mencetak"],c:0},
+{q:"Theme digunakan untuk?",a:["Desain slide","Data","Rumus","Browser"],c:0},
+{q:"Transition adalah?",a:["Perpindahan slide","Teks","Gambar","Audio"],c:0},
+{q:"Animation digunakan untuk?",a:["Efek objek","Data","File","Folder"],c:0},
+{q:"New Slide digunakan untuk?",a:["Menambah slide","Menghapus slide","Menyimpan","Mencetak"],c:0},
+{q:"Slide Show digunakan untuk?",a:["Menampilkan presentasi","Mengedit gambar","Menghapus file","Browser"],c:0}
+],
+
+medium:[
+{q:"Layout slide adalah?",a:["Tata letak slide","Warna","File","Rumus"],c:0},
+{q:"Design digunakan untuk?",a:["Mengatur tampilan","Menghapus data","Rumus","Browser"],c:0},
+{q:"Hyperlink digunakan untuk?",a:["Menghubungkan ke slide/web","Menghapus","Menyimpan","Mencetak"],c:0},
+{q:"Notes digunakan untuk?",a:["Catatan presenter","Slide","Gambar","Video"],c:0},
+{q:"Duplicate slide untuk?",a:["Menyalin slide","Menghapus","Menyimpan","Mengedit"],c:0},
+{q:"Align digunakan untuk?",a:["Meratakan objek","Menghapus","Menggambar","Rumus"],c:0},
+{q:"Group digunakan untuk?",a:["Menggabungkan objek","Menghapus","Menyimpan","Mencetak"],c:0},
+{q:"Background slide adalah?",a:["Latar belakang","Teks","Gambar","Audio"],c:0},
+{q:"Rehearse Timings digunakan untuk?",a:["Mengatur waktu presentasi","Menghapus slide","Mengedit gambar","Browser"],c:0},
+{q:"Slide Master digunakan untuk?",a:["Mengatur template utama","Slide biasa","File","Folder"],c:0}
+],
+
+hard:[
+{q:"Morph Transition digunakan untuk?",a:["Animasi halus antar slide","Menghapus slide","Menambah data","Browser"],c:0},
+{q:"Embed video berarti?",a:["Menanamkan video ke slide","Link saja","Menghapus video","Mengedit teks"],c:0},
+{q:"Presenter View digunakan untuk?",a:["Mode presenter","Mode edit","Mode hapus","Mode save"],c:0},
+{q:"Custom Animation digunakan untuk?",a:["Efek khusus objek","Slide","File","Data"],c:0},
+{q:"Export PowerPoint bisa menjadi?",a:["Video/PDF","Database","Browser","Game"],c:0},
+{q:"Section digunakan untuk?",a:["Mengelompokkan slide","Menghapus","Menyimpan","Rumus"],c:0},
+{q:"SmartArt digunakan untuk?",a:["Diagram visual","Teks","Audio","File"],c:0},
+{q:"Slide Orientation ada 2 yaitu?",a:["Portrait & Landscape","Up & Down","Left & Right","Big & Small"],c:0},
+{q:"Template adalah?",a:["Desain siap pakai","Data","File kosong","Rumus"],c:0},
+{q:"Presentasi looping berarti?",a:["Berulang terus","Sekali","Tidak jalan","Error"],c:0}
+]
+},
+
+jaringan:{
+easy:[
+{q:"Jaringan komputer adalah?",a:["Kumpulan komputer yang terhubung","Program","Hardware","Game"],c:0},
+{q:"LAN adalah singkatan dari?",a:["Local Area Network","Large Area Network","Light Area Network","Long Area Network"],c:0},
+{q:"Internet adalah?",a:["Jaringan global","Aplikasi","Software","Hardware"],c:0},
+{q:"Perangkat untuk menghubungkan jaringan?",a:["Router","Mouse","Keyboard","Monitor"],c:0},
+{q:"WiFi digunakan untuk?",a:["Internet tanpa kabel","Mencetak","Menggambar","Mengetik"],c:0},
+{q:"Modem berfungsi untuk?",a:["Menghubungkan internet","Mencetak","Menghapus data","Game"],c:0},
+{q:"IP Address adalah?",a:["Alamat perangkat di jaringan","Nama file","Program","Software"],c:0},
+{q:"Browser digunakan untuk?",a:["Mengakses internet","Menggambar","Mencetak","Mengetik"],c:0},
+{q:"Server adalah?",a:["Penyedia layanan","Client","Hardware kecil","Software game"],c:0},
+{q:"Client adalah?",a:["Pengguna layanan","Server","Router","Switch"],c:0}
+],
+
+medium:[
+{q:"Switch digunakan untuk?",a:["Menghubungkan perangkat dalam jaringan","Menghapus data","Mencetak","Game"],c:0},
+{q:"Router berfungsi untuk?",a:["Menghubungkan jaringan berbeda","Mengetik","Menggambar","Menyimpan data"],c:0},
+{q:"DNS digunakan untuk?",a:["Menerjemahkan domain ke IP","Menghapus file","Game","Browser"],c:0},
+{q:"Bandwidth adalah?",a:["Kapasitas data","Nama komputer","Software","Hardware"],c:0},
+{q:"Firewall digunakan untuk?",a:["Keamanan jaringan","Game","Browser","Printer"],c:0},
+{q:"LAN biasanya digunakan di?",a:["Sekolah/kantor","Seluruh dunia","Server saja","HP saja"],c:0},
+{q:"WAN adalah?",a:["Jaringan luas","Jaringan kecil","Software","Hardware"],c:0},
+{q:"Intranet adalah?",a:["Jaringan internal","Internet global","Game","Browser"],c:0},
+{q:"Topologi adalah?",a:["Bentuk jaringan","Software","Hardware","Game"],c:0},
+{q:"Hub berfungsi untuk?",a:["Menghubungkan perangkat","Menghapus data","Browser","Game"],c:0}
+],
+
+hard:[
+{q:"MAC Address adalah?",a:["Alamat unik perangkat","IP publik","Nama domain","Server"],c:0},
+{q:"Packet Switching digunakan untuk?",a:["Pengiriman data internet","Menggambar","Mencetak","Game"],c:0},
+{q:"Subnetting digunakan untuk?",a:["Membagi jaringan","Menghapus data","Browser","Game"],c:0},
+{q:"OSI Layer ada berapa?",a:["7","5","3","10"],c:0},
+{q:"Layer terbawah OSI adalah?",a:["Physical","Application","Session","Transport"],c:0},
+{q:"HTTPS lebih aman karena?",a:["Enkripsi data","Lebih cepat","Tanpa server","Offline"],c:0},
+{q:"Proxy digunakan untuk?",a:["Perantara koneksi","Game","Printer","CPU"],c:0},
+{q:"Latency adalah?",a:["Waktu delay jaringan","Kecepatan CPU","Memori","Storage"],c:0},
+{q:"Topology Star menggunakan?",a:["Switch/Hub pusat","Lingkaran","Bus","Mesh"],c:0},
+{q:"Topology Bus menggunakan?",a:["Satu kabel utama","Bintang","Lingkaran","Server pusat"],c:0}
+]
+},
+
+topologi:{
+easy:[
+{q:"Topologi jaringan adalah?",a:["Bentuk susunan jaringan","Jenis komputer","Software","Browser"],c:0},
+{q:"Topologi Star berbentuk seperti?",a:["Bintang","Lingkaran","Bus","Pohon"],c:0},
+{q:"Topologi Bus menggunakan?",a:["Kabel utama tunggal","Switch","Router","Server"],c:0},
+{q:"Topologi Ring berbentuk?",a:["Lingkaran","Bintang","Cabang","Acak"],c:0},
+{q:"Perangkat pusat di Star Topology adalah?",a:["Switch/Hub","Printer","Monitor","CPU"],c:0},
+{q:"Topologi Mesh memiliki?",a:["Banyak koneksi antar node","Satu kabel","Tanpa jaringan","Server saja"],c:0},
+{q:"Topologi Tree berbentuk seperti?",a:["Pohon","Lingkaran","Bintang","Kotak"],c:0},
+{q:"Kelebihan Star Topology?",a:["Mudah dikontrol","Susah diperbaiki","Lambat","Tidak stabil"],c:0},
+{q:"Kelemahan Bus Topology?",a:["Jika kabel rusak semua terganggu","Cepat","Aman","Stabil"],c:0},
+{q:"Topologi digunakan untuk?",a:["Mengatur bentuk jaringan","Membuat software","Mencetak","Browser"],c:0}
+],
+
+medium:[
+{q:"Jika hub pusat rusak di Star maka?",a:["Semua jaringan terganggu","Tetap jalan","Lebih cepat","Tidak berpengaruh"],c:0},
+{q:"Topologi mana paling mudah instalasi?",a:["Star","Mesh","Ring","Hybrid"],c:0},
+{q:"Topologi mana paling mahal?",a:["Mesh","Bus","Star","Ring"],c:0},
+{q:"Data di Bus mengalir pada?",a:["Satu kabel utama","Banyak kabel","Server","Router"],c:0},
+{q:"Ring Topology data mengalir?",a:["Satu arah/dua arah","Acak","Tidak mengalir","Langsung ke server"],c:0},
+{q:"Mesh Topology digunakan untuk?",a:["Jaringan sangat penting","Rumah kecil","Printer","Game"],c:0},
+{q:"Hybrid Topology adalah?",a:["Gabungan beberapa topologi","Satu jenis","Tidak ada jaringan","Software"],c:0},
+{q:"Kelebihan Mesh?",a:["Sangat stabil","Lemah","Lambat","Murah"],c:0},
+{q:"Kelemahan Ring?",a:["Jika putus gangguan jaringan","Cepat","Murah","Aman"],c:0},
+{q:"Hubungan antar perangkat disebut?",a:["Node","File","Program","Data"],c:0}
+],
+
+hard:[
+{q:"Dalam Mesh penuh setiap node terhubung ke?",a:["Semua node lain","Satu node","Server saja","Switch saja"],c:0},
+{q:"Collision sering terjadi pada?",a:["Bus Topology","Star","Mesh","Tree"],c:0},
+{q:"Token passing digunakan di?",a:["Ring Topology","Star","Bus","Mesh"],c:0},
+{q:"Backbone pada Bus Topology adalah?",a:["Kabel utama","Server","Switch","Node"],c:0},
+{q:"Skalabilitas terbaik ada pada?",a:["Star Topology","Bus","Ring","Mesh"],c:0},
+{q:"Perangkat pusat di Star adalah?",a:["Switch/Hub","Router","Node","Client"],c:0},
+{q:"Topologi paling tahan gangguan adalah?",a:["Mesh","Bus","Ring","Star"],c:0},
+{q:"Data pada Ring mengalir dalam?",a:["Lingkaran","Acak","Bintang","Server"],c:0},
+{q:"Jika satu kabel putus di Bus maka?",a:["Semua jaringan terganggu","Tetap jalan","Lebih cepat","Aman"],c:0},
+{q:"Hybrid Topology berarti?",a:["Gabungan beberapa topologi","Satu jenis","Tidak terhubung","Offline"],c:0}
+]
+},
+
+keamanan:{
+easy:[
+{q:"Keamanan jaringan adalah?",a:["Perlindungan jaringan dari ancaman","Menghapus file","Membuat game","Browser"],c:0},
+{q:"Firewall digunakan untuk?",a:["Melindungi jaringan","Membuat website","Mengedit gambar","Mencetak"],c:0},
+{q:"Virus komputer adalah?",a:["Program berbahaya","Aplikasi Word","Browser","Hardware"],c:0},
+{q:"Antivirus berfungsi untuk?",a:["Menghapus virus","Membuat file","Mengetik","Browsing"],c:0},
+{q:"Password digunakan untuk?",a:["Keamanan akun","Mencetak","Menggambar","Game"],c:0},
+{q:"Hacker adalah?",a:["Orang yang masuk sistem","Pengguna biasa","Admin printer","Designer"],c:0},
+{q:"Phishing adalah?",a:["Penipuan data online","Game online","Software","Hardware"],c:0},
+{q:"Update sistem bertujuan?",a:["Keamanan dan perbaikan","Menghapus data","Mematikan PC","Game"],c:0},
+{q:"Login digunakan untuk?",a:["Masuk sistem","Keluar sistem","Menghapus file","Browsing"],c:0},
+{q:"Logout berarti?",a:["Keluar dari sistem","Masuk sistem","Mengedit file","Install aplikasi"],c:0}
+],
+
+medium:[
+{q:"Firewall bekerja pada?",a:["Menyaring trafik jaringan","Menggambar","Mencetak","Game"],c:0},
+{q:"Enkripsi digunakan untuk?",a:["Mengamankan data","Menghapus data","Browsing","Game"],c:0},
+{q:"Malware adalah?",a:["Perangkat lunak berbahaya","Aplikasi biasa","Hardware","Driver"],c:0},
+{q:"Spyware digunakan untuk?",a:["Memata-matai pengguna","Mencetak","Browser","Game"],c:0},
+{q:"Two-factor authentication adalah?",a:["Verifikasi dua langkah","Login sekali","Tanpa password","Game"],c:0},
+{q:"Backup data berfungsi untuk?",a:["Cadangan data","Menghapus data","Browsing","Game"],c:0},
+{q:"HTTPS lebih aman karena?",a:["Menggunakan enkripsi","Lebih cepat","Offline","Tanpa server"],c:0},
+{q:"Brute force attack adalah?",a:["Menebak password berulang","Virus","Firewall","Backup"],c:0},
+{q:"Trojan adalah?",a:["Program berbahaya tersembunyi","Browser","Driver","Game"],c:0},
+{q:"Spam email adalah?",a:["Email tidak diinginkan","Email resmi","Virus","File"],c:0}
+],
+
+hard:[
+{q:"AES digunakan untuk?",a:["Enkripsi data","Mencetak","Browser","Game"],c:0},
+{q:"Public key digunakan pada?",a:["Kriptografi","Printer","Monitor","CPU"],c:0},
+{q:"Private key digunakan untuk?",a:["Dekripsi data","Game","Browser","File"],c:0},
+{q:"DDoS attack adalah?",a:["Serangan membanjiri server","Login biasa","Backup","Update"],c:0},
+{q:"VPN digunakan untuk?",a:["Koneksi aman dan anonim","Game","Printer","Edit gambar"],c:0},
+{q:"Digital signature berfungsi untuk?",a:["Verifikasi keaslian data","Menghapus file","Game","Browser"],c:0},
+{q:"IDS adalah singkatan dari?",a:["Intrusion Detection System","Internet Data System","Internal Data Service","Input Data System"],c:0},
+{q:"IPS berfungsi untuk?",a:["Mencegah serangan","Membuat game","Browser","Printer"],c:0},
+{q:"Ransomware adalah?",a:["Malware yang mengunci data","Browser","Driver","Game"],c:0},
+{q:"Social engineering adalah?",a:["Manipulasi manusia untuk curi data","Firewall","Enkripsi","Backup"],c:0}
+]
+},
+
+database:{
+easy:[
+{q:"Database adalah?",a:["Tempat menyimpan data","Program game","Browser","Hardware"],c:0},
+{q:"DBMS adalah singkatan dari?",a:["Database Management System","Data Base Main System","Digital Base Management","Data Browser Model System"],c:0},
+{q:"Contoh DBMS?",a:["MySQL","Word","Excel","Chrome"],c:0},
+{q:"Data dalam database disimpan dalam?",a:["Tabel","Gambar","Video","Folder saja"],c:0},
+{q:"Primary Key digunakan untuk?",a:["Identitas unik data","Menghapus data","Browsing","Mencetak"],c:0},
+{q:"SQL digunakan untuk?",a:["Mengelola database","Membuat gambar","Browser","Game"],c:0},
+{q:"Record adalah?",a:["Baris data","Kolom data","Program","File"],c:0},
+{q:"Field adalah?",a:["Kolom data","Baris data","Database","Server"],c:0},
+{q:"MySQL termasuk?",a:["DBMS","Browser","OS","Game"],c:0},
+{q:"Database digunakan untuk?",a:["Menyimpan dan mengelola data","Menggambar","Mengetik","Browsing"],c:0}
+],
+
+medium:[
+{q:"Foreign Key digunakan untuk?",a:["Menghubungkan tabel","Menghapus tabel","Menampilkan data","Browser"],c:0},
+{q:"DDL dalam SQL adalah?",a:["Data Definition Language","Data Delete Language","Database Design Language","Data Drive Language"],c:0},
+{q:"DML dalam SQL adalah?",a:["Data Manipulation Language","Data Model Language","Database Main Language","Data Merge Language"],c:0},
+{q:"Perintah SELECT digunakan untuk?",a:["Mengambil data","Menghapus data","Membuat tabel","Menutup database"],c:0},
+{q:"Perintah INSERT digunakan untuk?",a:["Menambah data","Menghapus data","Mengedit database","Browsing"],c:0},
+{q:"Perintah UPDATE digunakan untuk?",a:["Mengubah data","Menghapus data","Menampilkan data","Membuat tabel"],c:0},
+{q:"Perintah DELETE digunakan untuk?",a:["Menghapus data","Menambah data","Menampilkan data","Mengurutkan data"],c:0},
+{q:"Relasi one to many artinya?",a:["Satu ke banyak data","Satu ke satu","Banyak ke banyak","Tidak berhubungan"],c:0},
+{q:"Index dalam database berfungsi untuk?",a:["Mempercepat pencarian","Menghapus data","Menambah tabel","Browser"],c:0},
+{q:"Tabel terdiri dari?",a:["Baris dan kolom","Gambar dan teks","File dan folder","Program"],c:0}
+],
+
+hard:[
+{q:"Normalisasi database digunakan untuk?",a:["Mengurangi duplikasi data","Menambah data","Menghapus database","Browser"],c:0},
+{q:"1NF berarti?",a:["First Normal Form","Final Normal Form","Fast Normal Form","Full Normal File"],c:0},
+{q:"2NF mengharuskan?",a:["Tidak ada ketergantungan parsial","Tidak ada tabel","Tidak ada database","Semua sama"],c:0},
+{q:"ERD adalah singkatan dari?",a:["Entity Relationship Diagram","Entity Record Data","External Relation Database","Entity Resource Data"],c:0},
+{q:"Entity dalam database adalah?",a:["Objek yang disimpan datanya","Program","Browser","Hardware"],c:0},
+{q:"Attribute adalah?",a:["Sifat dari entity","Program","Database","Server"],c:0},
+{q:"Composite Key adalah?",a:["Gabungan lebih dari satu key","Satu key saja","Tidak ada key","Browser"],c:0},
+{q:"Join dalam SQL digunakan untuk?",a:["Menggabungkan tabel","Menghapus data","Menambah database","Browser"],c:0},
+{q:"Inner Join berarti?",a:["Data yang cocok di kedua tabel","Semua data","Data kosong","Random data"],c:0},
+{q:"ACID dalam database berarti?",a:["Atomicity, Consistency, Isolation, Durability","Array, Column, Index, Data","Active Control Internal Database","Advanced Computer Information Data"],c:0}
+]
+},
+
+mysql:{
+easy:[
+{q:"MySQL adalah?",a:["Sistem manajemen database","Browser","Word Processor","Game"],c:0},
+{q:"MySQL digunakan untuk?",a:["Mengelola database","Menggambar","Mencetak","Browsing"],c:0},
+{q:"MySQL termasuk?",a:["DBMS","OS","Hardware","Browser"],c:0},
+{q:"Bahasa yang digunakan MySQL?",a:["SQL","HTML","CSS","JavaScript"],c:0},
+{q:"Perintah untuk melihat data?",a:["SELECT","INSERT","DELETE","UPDATE"],c:0},
+{q:"Perintah untuk menambah data?",a:["INSERT","SELECT","DELETE","DROP"],c:0},
+{q:"Perintah untuk menghapus data?",a:["DELETE","SELECT","INSERT","CREATE"],c:0},
+{q:"Perintah untuk mengubah data?",a:["UPDATE","SELECT","INSERT","DROP"],c:0},
+{q:"MySQL berjalan di?",a:["Server","Monitor","Keyboard","Mouse"],c:0},
+{q:"Database disimpan dalam bentuk?",a:["Tabel","Gambar","Video","File Word"],c:0}
+],
+
+medium:[
+{q:"Primary Key berfungsi untuk?",a:["Identitas unik data","Menghapus data","Browser","Game"],c:0},
+{q:"Foreign Key digunakan untuk?",a:["Menghubungkan tabel","Menghapus tabel","Menambah tabel","Browser"],c:0},
+{q:"WHERE digunakan untuk?",a:["Menyaring data","Menambah data","Menghapus database","Install"],c:0},
+{q:"ORDER BY digunakan untuk?",a:["Mengurutkan data","Menghapus data","Menambah data","Browser"],c:0},
+{q:"LIMIT digunakan untuk?",a:["Membatasi jumlah data","Menambah data","Menghapus data","Update"],c:0},
+{q:"Database dibuat dengan perintah?",a:["CREATE DATABASE","MAKE DB","NEW DATABASE","ADD DB"],c:0},
+{q:"Tabel dibuat dengan perintah?",a:["CREATE TABLE","MAKE TABLE","NEW TABLE","ADD TABLE"],c:0},
+{q:"ALTER digunakan untuk?",a:["Mengubah struktur tabel","Menghapus data","Menambah data","Browser"],c:0},
+{q:"DROP digunakan untuk?",a:["Menghapus database/tabel","Menambah data","Update data","Select data"],c:0},
+{q:"INSERT INTO digunakan untuk?",a:["Menambahkan data ke tabel","Menghapus data","Menampilkan data","Update data"],c:0}
+],
+
+hard:[
+{q:"JOIN digunakan untuk?",a:["Menggabungkan tabel","Menghapus tabel","Menambah database","Browser"],c:0},
+{q:"INNER JOIN menampilkan?",a:["Data yang cocok di kedua tabel","Semua data","Data kosong","Random data"],c:0},
+{q:"LEFT JOIN menampilkan?",a:["Semua data kiri + cocok kanan","Semua data kanan saja","Data acak","Tidak ada data"],c:0},
+{q:"INDEX di MySQL berfungsi untuk?",a:["Mempercepat pencarian data","Menghapus data","Menambah tabel","Browser"],c:0},
+{q:"VIEW adalah?",a:["Tabel virtual","Tabel asli","Database baru","File"],c:0},
+{q:"TRUNCATE digunakan untuk?",a:["Menghapus semua data tabel","Menghapus database","Menambah data","Update data"],c:0},
+{q:"PRIMARY KEY harus?",a:["Unik dan tidak boleh NULL","Boleh kosong","Duplikat","Random"],c:0},
+{q:"AUTO_INCREMENT digunakan untuk?",a:["Menambah angka otomatis","Menghapus data","Update data","Browser"],c:0},
+{q:"Stored Procedure adalah?",a:["Kumpulan perintah SQL tersimpan","Browser","File","OS"],c:0},
+{q:"Trigger adalah?",a:["Perintah otomatis saat event terjadi","Manual query","Database","Table"],c:0}
+]
+},
+
+
+
+
+};
+
+/* =========================
+   FUNCTION QUIZ
+========================= */
+
+function load(){
+
+let q = quizData[materi][level][index];
+
+document.getElementById("question").innerText =
+(index+1)+". "+q.q;
+
+let html = "";
+
+q.a.forEach((v,i)=>{
+
+html += `
+<div class="option" onclick="select(${i})">
+${v}
+</div>
+`;
+
+});
+
+document.getElementById("options").innerHTML = html;
+
+}
+
+function select(i){
+
+let q = quizData[materi][level][index];
+
+document.querySelectorAll(".option").forEach((el,idx)=>{
+
+if(idx===q.c){
+el.classList.add("correct");
+}else{
+el.classList.add("wrong");
+}
+
+});
+
+if(i===q.c){
+score++;
+}
+
+}
+
+function next(){
+
+index++;
+
+if(index < quizData[materi][level].length){
+
+load();
+
+}else{
+
+document.querySelector(".container").innerHTML = `
+<h2>🎉 Finish!</h2>
+
+<p style="text-align:center;font-size:22px;">
+Score Kamu : ${score} / ${quizData[materi][level].length}
+</p>
+
+<button class="btn" onclick="location.reload()">
+Main Lagi
+</button>
+`;
+
+}
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
